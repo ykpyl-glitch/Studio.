@@ -1,2 +1,2 @@
-{"name":"Weaver","short_name":"Weaver","start_url":"./","scope":"./","display":"standalone","background_color":"#08090C","theme_color":"#08090C","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}
+{"name":"Weaver.","short_name":"Weaver.","start_url":"./","scope":"./","display":"standalone","background_color":"#08090C","theme_color":"#08090C","icons":[{"src":"apple-touch-icon.png","sizes":"any","type":"image/svg+xml","purpose":"any"}]}
 
