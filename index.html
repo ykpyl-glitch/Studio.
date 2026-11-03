@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#08090C"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon.svg">
-<title>PYTHON//STUDIO</title>
+<title>Weaver</title>
 <style>
 :root{--bg-main:#08090C;--bg-secondary:#0D0F13;--bg-sidebar:#0A0B0E;--bg-panel:#101217;--bg-elevated:#151820;--accent:#C8102E;--accent-bright:#E11D48;--accent-overlay:rgba(200,16,46,.12);--text-primary:#E8E9ED;--text-secondary:#9296A1;--text-muted:#606571;--border:#252831;--separator:#1B1E25;--error:#D94A5A;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace}
 *{box-sizing:border-box}
@@ -45,18 +45,55 @@ aside{position:fixed;z-index:5;left:0;top:calc(44px + env(safe-area-inset-top));
 body.side aside{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.55)}
 main[data-view=code] #out,main[data-view=out] #ed{display:none}}
 @media(min-width:901px){#menu,#view{display:none}}
-</style></head><body>
+
+:root{--bg-main:#08090C;--bg-secondary:#0D0F13;--bg-sidebar:#0A0B0E;--bg-panel:#101217;--bg-elevated:#151820;--accent:#C8102E;--accent-bright:#F0284F;--accent-overlay:rgba(240,40,79,.12);--text-primary:#E8E9ED;--text-secondary:#9296A1;--text-muted:#606571;--border:#252831;--separator:#1B1E25;--error:#FF6B81;--silver:#C9CCD6}
+header{background:linear-gradient(#12141A,#0D0F13);box-shadow:0 1px 0 rgba(255,255,255,.05)}
+.brand{font:700 16px Inter,system-ui,sans-serif;letter-spacing:-.02em}.brand b{color:var(--accent-bright)}
+button{border-radius:7px}button:hover{border-color:#3A3F4D}
+button:focus-visible{outline:2px solid var(--silver);outline-offset:1px}
+button.run{background:linear-gradient(135deg,#F0284F,#A31238);border:0;box-shadow:0 2px 14px rgba(255,77,109,.28)}
+#st::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--silver);margin-right:6px}
+.row.on{background:linear-gradient(90deg,var(--accent-overlay),transparent)}
+.tab.on{border-bottom-color:var(--accent-bright)}
+#outp{background:linear-gradient(#101217,#0C0E12)}
+::selection{background:rgba(255,77,109,.3)}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#252831;border-radius:4px}
+#splash{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:env(safe-area-inset-top) 24px env(safe-area-inset-bottom);text-align:center;background:radial-gradient(120% 90% at 50% 0%,#2A0B15 0%,#08090C 64%);transition:opacity .5s}
+#splash.hide{opacity:0;pointer-events:none}
+#splash>:not(svg){position:relative}
+#weave{position:absolute;inset:0;width:100%;height:100%}
+#weave path{stroke-dasharray:1;stroke-dashoffset:1;opacity:.75;animation:draw 2.8s cubic-bezier(.2,.7,.2,1) var(--d) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+#splash h1{margin:0;font:700 clamp(52px,15vw,104px) Inter,system-ui,sans-serif;letter-spacing:-.045em}
+#splash h1 b{color:var(--accent-bright)}
+#splash p{margin:0;max-width:34ch;color:var(--text-secondary);font-size:15px;line-height:1.5}
+#bar{width:220px;height:2px;border-radius:2px;background:var(--separator);overflow:hidden}
+#bar i{display:block;height:100%;width:35%;background:linear-gradient(90deg,var(--silver),var(--accent-bright));animation:slide 1.2s ease-in-out infinite}
+@keyframes slide{from{margin-left:-35%}to{margin-left:100%}}
+#splash.ready #bar i{animation:none;width:100%}
+#ex{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:560px}
+.chip2{background:rgba(21,24,32,.85);border-radius:999px;padding:0 14px}
+@media(prefers-reduced-motion:reduce){#weave path{animation:none;stroke-dashoffset:0}#bar i{animation:none}}
+</style></head><body><div id="splash"><svg id="weave" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke-width="1.2">
+<path pathLength="1" stroke="#FF4D6D" style="--d:0s" d="M-20 140 C220 20 360 330 820 170"/>
+<path pathLength="1" stroke="#C9CCD6" style="--d:.2s" d="M-20 200 C240 340 380 40 820 250"/>
+<path pathLength="1" stroke="#FF4D6D" style="--d:.4s" d="M-20 300 C200 200 420 420 820 300"/>
+<path pathLength="1" stroke="#C9CCD6" style="--d:.6s" d="M-20 360 C260 460 400 180 820 380"/>
+<path pathLength="1" stroke="#606571" style="--d:.8s" d="M-20 80 C260 180 480 -20 820 90"/>
+<path pathLength="1" stroke="#9B1236" style="--d:1s" d="M-20 440 C300 340 520 520 820 430"/></svg>
+<h1>Weaver<b>.</b></h1><p>Python, the web and creative code in one workspace.</p>
+<div id="bar"><i></i></div><div id="sm" class="chip">Loading editor...</div><div id="ex"></div><button id="go" class="run" hidden>Open workspace</button></div>
 <header>
-<button id="menu">&#9776;</button><span class="brand">PYTHON<b>//</b>STUDIO</span><span id="st" class="chip">PY idle</span>
+<button id="menu">&#9776;</button><span class="brand">Weaver<b>.</b></span><span id="st" class="chip">PY idle</span>
 <span class="sp"></span>
 <button id="fm">A-</button><button id="fp">A+</button><button id="view">Output</button>
-<button id="stop" hidden>Stop</button><button id="run" class="run">RUN</button>
+<button id="cell" title="Run current # %% cell">Cell</button><button id="stop" hidden>Stop</button><button id="run" class="run">RUN</button>
 </header>
 <main data-view="code">
-<aside id="side"><div class="ah"><span>FILES</span><span><button id="dl" class="mini">&#8681;</button><button id="nf" class="mini">+</button></span></div>
+<aside id="side"><div class="ah"><span>FILES</span><span><button id="nb" class="mini" title="Export as notebook (.ipynb)">nb</button><button id="zp" class="mini" title="Export project as ZIP">zip</button><button id="im" class="mini" title="Import files, ZIP or notebook">&#8679;</button><input id="fi" type="file" multiple hidden accept=".py,.js,.html,.css,.json,.txt,.md,.csv,.svg,.ipynb,.zip"><button id="dl" class="mini" title="Download this file">&#8681;</button><button id="nf" class="mini">+</button></span></div>
 <div id="files"></div><div id="foot" class="chip"></div></aside>
 <section id="ed"><div id="tabs"></div><div id="mon"></div></section>
-<section id="out"><div id="otabs"><button id="t1" class="tab on">Output</button><button id="t2" class="tab">Preview</button><span class="sp"></span><button id="clr" class="tab">Clear</button></div>
+<section id="out"><div id="otabs"><button id="t1" class="tab on">Output</button><button id="t2" class="tab">Preview</button><span class="sp"></span><button id="pk" class="tab">Packages</button><button id="clr" class="tab">Clear</button></div>
 <div id="outp"></div>
 <div id="prev" hidden><iframe id="pf" sandbox="allow-scripts allow-modals"></iframe><pre id="wc"></pre></div></section>
 </main>
@@ -66,7 +103,7 @@ const $=id=>document.getElementById(id),el=(t,c,x)=>{const e=document.createElem
 const MB='https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/';
 const LANG={py:'python',js:'javascript',html:'html',css:'css',json:'json',md:'markdown'};
 const SEED={
-'hello.py':"name = 'PYTHON//STUDIO'\nprint(f'Hello from {name}')\nx = 21\nx * 2\n",
+'hello.py':"name = 'Weaver'\nprint(f'Hello from {name}')\nx = 21\nx * 2\n",
 'plot.py':"import numpy as np\nimport matplotlib.pyplot as plt\nx = np.linspace(0, 10, 500)\nplt.plot(x, np.sin(x))\nplt.title('sin(x)')\nplt.show()\n",
 'data.py':"import pandas as pd\ndf = pd.DataFrame({'n': range(1, 6), 'square': [i*i for i in range(1, 6)]})\ndf\n",
 'index.html':"<h1>Hello, web</h1>\n<button id=\"b\">Tap me</button>\n<link rel=\"stylesheet\" href=\"style.css\">\n<script src=\"script.js\"><\/script>\n",
@@ -82,9 +119,12 @@ function pyWorker(){
  const post=(t,d)=>postMessage({t,d});
  const R=(async()=>{const p=await loadPyodide({indexURL:IDX});p.setStdout({batched:s=>post('out',s)});p.setStderr({batched:s=>post('err',s)});post('ready');return p})();
  const SNIP="import sys,io,base64\no=[]\nif 'matplotlib.pyplot' in sys.modules:\n    import matplotlib.pyplot as plt\n    for n in plt.get_fignums():\n        b=io.BytesIO();plt.figure(n).savefig(b,format='png',dpi=110,bbox_inches='tight');o.append(base64.b64encode(b.getvalue()).decode())\n    plt.close('all')\no";
- const MPL="import matplotlib\nmatplotlib.use('agg')\nimport matplotlib.pyplot as plt\nplt.style.use('dark_background')\nplt.show=lambda *a,**k:None";
- onmessage=async({data})=>{let t;
+ const MPL="import matplotlib\nmatplotlib.use('agg')\nimport matplotlib.pyplot as plt\nplt.style.use('dark_background')\nplt.rcParams.update({'figure.facecolor':'#101217','axes.facecolor':'#101217','savefig.facecolor':'#101217','axes.prop_cycle':plt.cycler(color=['#FF4D6D','#C9CCD6','#E6B566','#7EE0C3'])})\nplt.show=lambda *a,**k:None";
+ let Q=Promise.resolve();onmessage=({data})=>{Q=Q.then(()=>H(data))};const H=async data=>{let t;
   try{const py=await R;t=performance.now();
+   if(data.pkgs){await py.loadPackage('micropip');const mp=py.pyimport('micropip');
+   for(const n of data.pkgs){try{await mp.install(n);post('pk',n);if(data.manual)post('out','installed '+n)}catch(e){post('err',n+': '+String(e.message||e).trim().split('\n').pop())}}
+   post('pkdone',!!data.manual);return}
    await py.loadPackagesFromImports(data.code);
    if(data.code.includes('matplotlib'))await py.runPythonAsync(MPL);
    const r=await py.runPythonAsync(data.code);
@@ -97,14 +137,14 @@ const W='('+pyWorker+')()';
 let w=null,busy=false,models={},O=[],cur=null,D=new Set(),tm,ed,fs=14;
 const st=s=>$('st').textContent=s;
 function log(s,c){const d=el('div',c||'',s);$('outp').append(d);$('outp').scrollTop=1e9}
-function boot(){st('PY loading...');w=new Worker(URL.createObjectURL(new Blob([W],{type:'text/javascript'})));
+function boot(){st('PY loading...');w=new Worker(URL.createObjectURL(new Blob([W],{type:'text/javascript'})));if(PK.length){log('Restoring packages: '+PK.join(', '),'m');w.postMessage({pkgs:PK})}
  w.onerror=e=>{log('Python runtime failed to load: '+(e.message||'check your connection (first run needs internet).'),'e');busy=false;$('stop').hidden=true;w=null;st('PY error')};
  w.onmessage=({data:{t,d}})=>{
   if(t==='ready')st('PY ready');
   else if(t==='out')log(d);else if(t==='err')log(d,'e');
   else if(t==='html'){const f=el('iframe');f.setAttribute('sandbox','');f.srcdoc='<style>body{margin:6px;background:#101217;color:#E8E9ED;font:12px ui-monospace,monospace}table{border-collapse:collapse}td,th{border:1px solid #252831;padding:2px 8px;text-align:right}</style>'+d;$('outp').append(f)}
   else if(t==='img'){const i=el('img');i.src='data:image/png;base64,'+d;$('outp').append(i)}
-  else if(t==='done'){busy=false;$('stop').hidden=true;st('PY ready - '+d+' ms')}}}
+  else if(t==='pk'){if(!PK.includes(d)){PK.push(d);save()}}else if(t==='pkdone'){if(d){busy=false;$('stop').hidden=true}if(!busy)st('PY ready')}else if(t==='done'){busy=false;$('stop').hidden=true;st('PY ready - '+d+' ms')}}}
 /* views */
 function tab(n){$('outp').hidden=n!==1;$('prev').hidden=n!==2;$('t1').classList.toggle('on',n===1);$('t2').classList.toggle('on',n===2)}
 function setV(v){document.querySelector('main').dataset.view=v;$('view').textContent=v==='out'?'Code':'Output'}
@@ -118,14 +158,15 @@ const okName=n=>/^[\w.\- ]+$/.test(n)&&!models[n];
 function del(n){if(!confirm('Delete '+n+'? This cannot be undone.'))return;models[n].dispose();delete models[n];O=O.filter(x=>x!==n);cur=models[cur]?cur:(O[0]||Object.keys(models)[0]);cur?openF(cur):(ed.setModel(null),renderTabs(),list());save()}
 function ren(n){const m=(prompt('Rename to',n)||'').trim();if(!m||m===n)return;if(!okName(m))return alert('Invalid or existing name.');const t=models[n].getValue();models[n].dispose();delete models[n];addF(m,t);O=O.map(x=>x===n?m:x);if(cur===n)cur=m;openF(cur);save()}
 function dirty(n){D.add(n);renderTabs();clearTimeout(tm);tm=setTimeout(save,600)}
-async function save(){clearTimeout(tm);const o={};for(const n in models)o[n]=models[n].getValue();await kv('put','files',o);await kv('put','ui',{O,cur,fs});D.clear();renderTabs();usage()}
+async function save(){clearTimeout(tm);const o={};for(const n in models)o[n]=models[n].getValue();await kv('put','files',o);await kv('put','ui',{O,cur,fs,v:2,PK});D.clear();renderTabs();usage()}
 async function usage(){const e=navigator.storage&&navigator.storage.estimate?await navigator.storage.estimate():null;$('foot').textContent=(navigator.onLine?'online':'offline')+(e?' - '+(e.usage/1048576).toFixed(1)+' MB used':'')}
 /* run: .py -> Pyodide, anything else -> sandboxed web preview */
 function run(){const f=cur;if(!f)return;save();
  if(/\.py$/i.test(f)){if(busy)return;if(!w)boot();busy=true;$('stop').hidden=false;tab(1);setV('out');log('>>> '+f,'m');st('PY running...');w.postMessage({code:models[f].getValue()})}
  else{preview();tab(2);setV('out')}}
-function preview(){
- let h=models['index.html']?models['index.html'].getValue():'<p>Add an index.html to preview.</p>';
+async function preview(){
+ const cr=/\.(p5|three)\.js$/i.exec(cur||'');
+ let h=cr?await creative(cr[1]):(models['index.html']?models['index.html'].getValue():'<p>Add an index.html to preview.</p>');
  h=h.replace(/<link[^>]+href=["']([^"']+\.css)["'][^>]*>/g,(m,n)=>models[n]?'<style>'+models[n].getValue()+'</style>':m);
  h=h.replace(/<script[^>]+src=["']([^"']+\.js)["'][^>]*>\s*<\/script>/g,(m,n)=>models[n]?'<script>'+models[n].getValue().replace(/<\/script/gi,'<\\/script')+'<\/script>':m);
  const hook='<script>for(const k of["log","warn","error"]){const o=console[k];console[k]=(...a)=>{parent.postMessage({c:k,m:a.map(String).join(" ")},"*");o.apply(console,a)}}onerror=m=>parent.postMessage({c:"error",m:String(m)},"*")<\/script>';
@@ -149,13 +190,59 @@ if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 require.config({paths:{vs:MB+'vs'}});
 window.MonacoEnvironment={getWorkerUrl:()=>URL.createObjectURL(new Blob(["self.MonacoEnvironment={baseUrl:'"+MB+"'};importScripts('"+MB+"vs/base/worker/workerMain.js');"],{type:'text/javascript'}))};
 require(['vs/editor/editor.main'],async()=>{
- monaco.editor.defineTheme('ps',{base:'vs-dark',inherit:true,rules:[],colors:{'editor.background':'#08090C','editorLineNumber.foreground':'#606571','editor.lineHighlightBackground':'#0D0F13','editorCursor.foreground':'#E11D48','editor.selectionBackground':'#67142688'}});
+ monaco.editor.defineTheme('ps',{base:'vs-dark',inherit:true,rules:[{token:'keyword',foreground:'FF5C77'},{token:'string',foreground:'E3C07B'},{token:'comment',foreground:'606571',fontStyle:'italic'},{token:'number',foreground:'F2A07B'},{token:'tag',foreground:'FF5C77'},{token:'attribute.name',foreground:'C9CCD6'},{token:'attribute.value',foreground:'E3C07B'}],colors:{'editor.background':'#08090C','editorLineNumber.foreground':'#4A4F5C','editorLineNumber.activeForeground':'#9296A1','editor.lineHighlightBackground':'#0D0F13','editorCursor.foreground':'#FF4D6D','editor.selectionBackground':'#E11D4840','editorIndentGuide.background1':'#1B1E25'}});
  ed=monaco.editor.create($('mon'),{theme:'ps',automaticLayout:true,fontFamily:"'JetBrains Mono',ui-monospace,Menlo,monospace",fontSize:14,minimap:{enabled:false},tabSize:4,insertSpaces:true,scrollBeyondLastLine:false,padding:{top:8}});
- let files=await kv('get','files'),ui=(await kv('get','ui'))||{};const seeded=!files;if(!files)files=SEED;
+ let files=await kv('get','files'),ui=(await kv('get','ui'))||{};let seeded=!files;if(!files)files=SEED;if((ui.v||1)<2){for(const n in SEED2)if(!(n in files))files[n]=SEED2[n];seeded=true}const hold=seeded;
  for(const n in files)addF(n,files[n]);
- fs=ui.fs||14;ed.updateOptions({fontSize:fs});
+ fs=ui.fs||14;PK=ui.PK||[];ed.updateOptions({fontSize:fs});
  O=(ui.O||['hello.py']).filter(n=>models[n]);if(!O.length)O=[Object.keys(models)[0]];
  openF(ui.cur&&models[ui.cur]?ui.cur:O[0]);
- ed.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.Enter,run);ed.addCommand(monaco.KeyMod.Shift|monaco.KeyCode.Enter,run);
- if(seeded)await save();else usage()});
+ ed.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.Enter,run);ed.addCommand(monaco.KeyMod.Shift|monaco.KeyCode.Enter,runCell);
+ if(seeded)await save();else usage();splash(hold)});
+/* ---- Weaver additions: creative studio, notebook cells, import/ZIP, welcome screen ---- */
+const SEED2={
+'particles.p5.js':"let ps=[];\nfunction setup(){createCanvas(windowWidth,windowHeight);noStroke()}\nfunction draw(){background(8,9,12,40);\n  if(mouseIsPressed||frameCount%3==0)ps.push({x:mouseX||width/2,y:mouseY||height/2,vx:random(-2,2),vy:random(-3,0),l:255});\n  ps=ps.filter(p=>p.l>0);\n  for(const p of ps){p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.l-=3;fill(255,77,109,p.l);circle(p.x,p.y,6)}}\n",
+'cube.three.js':"const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,100),r=new THREE.WebGLRenderer({antialias:true});\nr.setSize(innerWidth,innerHeight);document.body.append(r.domElement);\nconst m=new THREE.Mesh(new THREE.TorusKnotGeometry(1,.3,120,16),new THREE.MeshStandardMaterial({color:0xe11d48,metalness:.4,roughness:.3}));\nconst L=new THREE.PointLight(0xc9ccd6,2,50);L.position.set(4,3,4);\ns.add(m,L,new THREE.AmbientLight(0x333338,1.5));c.position.z=4;\n(function t(){m.rotation.x+=.01;m.rotation.y+=.014;r.render(s,c);requestAnimationFrame(t)})();\n",
+'notebook.py':"# %% [markdown]\n# # Notebook cells\n# Shift+Enter runs the cell under the cursor.\n\n# %%\nimport numpy as np\nx = np.arange(5)\nx ** 2\n\n# %%\nprint('variables persist:', x.sum())\n"};
+const LIBS={p5:'https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js',three:'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'},LC={},esc=t=>t.replace(/<\/script/gi,'<\\/script');
+async function creative(k){try{const u=LIBS[k.toLowerCase()],lib=LC[u]||(LC[u]=await(await fetch(u)).text());
+ return '<style>html,body{margin:0;overflow:hidden;background:#08090C}</style><script>'+esc(lib)+'<\/script><script>'+esc(models[cur].getValue())+'<\/script>'}
+ catch(e){return '<p style="color:#ff6b81;font:13px monospace">Could not load '+k+' (internet needed the first time).</p>'}}
+function runCell(){if(!cur||!/\.py$/i.test(cur))return run();if(busy)return;
+ const L=models[cur].getLinesContent(),ln=ed.getPosition().lineNumber-1;let a=0,b=L.length;
+ for(let i=0;i<L.length;i++)if(/^# %%/.test(L[i])){if(i<=ln)a=i;else{b=i;break}}
+ if(!w)boot();busy=true;$('stop').hidden=false;tab(1);setV('out');log('>>> '+cur+' (cell)','m');st('PY running...');w.postMessage({code:L.slice(a,b).join('\n')})}
+/* notebook interchange: "# %%" percent cells <-> .ipynb JSON */
+function toNb(t){const cells=[];let c=null;const mk=md=>{c={cell_type:md?'markdown':'code',metadata:{},source:[]};if(!md){c.outputs=[];c.execution_count=null}cells.push(c)};
+ for(const l of t.split('\n')){const m=/^# %%(\s*\[markdown\])?/.exec(l);if(m)mk(!!m[1]);else{if(!c)mk(false);c.source.push(c.cell_type==='markdown'?l.replace(/^# ?/,''):l)}}
+ for(const k of cells){while(k.source.length&&!k.source[k.source.length-1].trim())k.source.pop();k.source=k.source.map((x,i)=>i<k.source.length-1?x+'\n':x)}
+ return JSON.stringify({cells,metadata:{kernelspec:{name:'python3',display_name:'Python 3',language:'python'},language_info:{name:'python'}},nbformat:4,nbformat_minor:4},null,1)}
+function fromNb(j){const o=JSON.parse(j);if(!o||!Array.isArray(o.cells))throw Error('not a valid notebook');
+ return o.cells.map(k=>{const s=Array.isArray(k.source)?k.source.join(''):String(k.source||'');return k.cell_type==='markdown'?'# %% [markdown]\n'+s.split('\n').map(x=>'# '+x).join('\n'):k.cell_type==='code'?'# %%\n'+s:null}).filter(x=>x!==null).join('\n\n')+'\n'}
+/* import / export */
+const jz=()=>window.JSZip?Promise.resolve(JSZip):new Promise((ok,no)=>{const s=el('script');s.src='https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';s.onload=()=>ok(JSZip);s.onerror=()=>no(Error('JSZip failed to load (internet needed the first time)'));document.head.append(s)});
+const down=(b,n)=>{const a=el('a');a.href=URL.createObjectURL(b);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4e3)};
+const safe=p=>{if(/(^|[\\/])\.\.([\\/]|$)|^[\\/]/.test(p))return null;const n=p.split('/').pop();return /^[\w.\- ]+$/.test(n)&&n[0]!=='.'?n:null},TXT=/\.(py|js|html|css|json|txt|md|csv|svg)$/i;
+function put(n,t){let k=n,i=1;while(models[k])k=n.replace(/(\.[^.]*)?$/,'-'+(i++)+'$1');addF(k,t)}
+$('cell').onclick=runCell;
+$('nb').onclick=()=>cur&&/\.py$/i.test(cur)?down(new Blob([toNb(models[cur].getValue())]),cur.replace(/\.py$/i,'.ipynb')):alert('Open a .py file to export it as a notebook.');
+$('zp').onclick=async()=>{try{const Z=await jz(),z=new Z();for(const n in models)z.file(n,models[n].getValue());down(await z.generateAsync({type:'blob'}),'weaver-project.zip')}catch(e){alert(e.message)}};
+$('im').onclick=()=>$('fi').click();
+$('fi').onchange=async e=>{for(const f of e.target.files){try{
+ if(/\.zip$/i.test(f.name)){const z=await(await jz()).loadAsync(f);for(const p in z.files){if(z.files[p].dir)continue;const n=safe(p);if(n&&TXT.test(n))put(n,await z.files[p].async('string'))}}
+ else if(/\.ipynb$/i.test(f.name))put(f.name.replace(/\.ipynb$/i,'.py'),fromNb(await f.text()));
+ else{const n=safe(f.name);if(n&&TXT.test(n))put(n,await f.text());else throw Error('unsupported file type')}
+ }catch(x){alert(f.name+': '+x.message)}}e.target.value='';list();save()};
+/* welcome screen */
+const EX=[['Python basics','hello.py'],['Matplotlib plot','plot.py'],['Pandas table','data.py'],['Notebook cells','notebook.py'],['p5.js particles','particles.p5.js'],['Three.js knot','cube.three.js'],['Web page','index.html']];
+const hide=()=>{const s=$('splash');if(!s)return;s.classList.add('hide');setTimeout(()=>s.remove(),600)};
+function splash(hold){const s=$('splash');if(!s)return;s.classList.add('ready');$('sm').textContent='Ready';
+ if(hold){EX.forEach(([t,f])=>{if(!models[f])return;const b=el('button','chip2',t);b.onclick=()=>{openF(f);hide()};$('ex').append(b)});$('go').hidden=false;$('go').onclick=hide}
+ else setTimeout(hide,1400)}
+setTimeout(()=>{if(!ed&&$('sm'))$('sm').textContent='Still loading. The first launch needs internet.'},8000);
+/* ---- Python packages: Pyodide-bundled or pure-Python wheels via micropip; restored whenever the interpreter starts ---- */
+let PK=[];
+$('pk').onclick=()=>{if(busy)return alert('Wait for the current run to finish.');
+ const v=(prompt('Python packages to install, separated by spaces.\nPyodide includes scipy, sympy, scikit-learn and pillow; pure-Python packages from PyPI also work. Needs internet.')||'').split(/[\s,]+/).filter(x=>/^[A-Za-z0-9][A-Za-z0-9._-]*(==[A-Za-z0-9.]+)?$/.test(x));
+ if(!v.length)return;if(!w)boot();busy=true;$('stop').hidden=false;tab(1);setV('out');log('pip install '+v.join(' '),'m');st('PY installing...');w.postMessage({pkgs:v,manual:1})};
 </script></body></html>
